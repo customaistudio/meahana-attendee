@@ -1,0 +1,21 @@
+INSIGHTS (array of strings, 2-5 items):
+Surface patterns the organizer might not have noticed about their meeting leadership.
+
+These should be genuinely useful observations, not generic advice. Look for:
+
+Team dynamics:
+- "Three team members didn't speak until directly asked - consider whether they feel safe contributing"
+- "The discussion became noticeably more productive after you reframed the problem"
+- "Energy dropped significantly in the second half - the group may have hit decision fatigue"
+
+Leadership patterns:
+- "You asked great open-ended questions that generated rich discussion"
+- "Several ideas were raised but not acknowledged before moving on"
+- "The meeting ran 15 minutes over, which may signal scope creep in your agenda"
+
+Opportunities:
+- "Alex's concern about timeline was raised twice but not fully addressed"
+- "The group seemed aligned early but you continued discussing - earlier closure was possible"
+- "Multiple people offered to help but no one was assigned ownership"
+
+Each insight should help the organizer see something they couldn't see while facilitating.

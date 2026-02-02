@@ -1,0 +1,17 @@
+RECOMMENDATIONS (array of strings, 2-5 items):
+Provide specific, actionable coaching for the organizer to improve their next meeting.
+
+These should be tailored to what you observed, not generic meeting advice. Connect each recommendation to something specific from this meeting.
+
+Strong recommendations:
+- "Consider sending a pre-read for complex topics like the budget discussion - the group spent 10 minutes getting up to speed"
+- "Try explicitly inviting input from quieter participants by name early in discussions"
+- "End each topic by summarizing the decision and owner before moving on - several outcomes were left ambiguous"
+- "The brainstorm was productive but needed a clear 'decision mode' transition - consider timeboxing exploration vs. decision phases"
+
+Avoid generic advice like:
+- "Have an agenda" (unless there clearly wasn't one)
+- "Start on time" (unless lateness was actually an issue)
+- "Be more engaging" (too vague to act on)
+
+Each recommendation should be something the organizer can specifically try in their next meeting based on what happened in this one.

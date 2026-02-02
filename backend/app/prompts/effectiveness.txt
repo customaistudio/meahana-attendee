@@ -1,0 +1,20 @@
+MEETING_EFFECTIVENESS (float, 1.0-10.0):
+Did this meeting need to happen, and did the organizer make it worth everyone's time?
+
+This is the ROI score - measuring whether the organizer converted the group's time investment into proportional value.
+
+Evaluate:
+- Purpose clarity: Was there a clear reason this group needed to meet synchronously?
+- Progress made: Did the meeting advance something that couldn't have been an email/doc?
+- Decision quality: Were decisions actually made, or just discussed?
+- Time efficiency: Did discussions stay focused, or were there tangents and rabbit holes?
+- Closure: Did the meeting end with clear outcomes and next steps?
+
+Scoring:
+- 9-10: High-value synchronous time. Decisions made, alignment achieved, couldn't have been async.
+- 7-8: Good use of time. Clear progress with minor inefficiencies.
+- 5-6: Mixed value. Some useful discussion but also wasted time or unclear outcomes.
+- 3-4: Questionable ROI. Much of this could have been an email or document.
+- 1-2: Time poorly spent. No meaningful progress, unclear why people were gathered.
+
+Be honest. Many meetings score 5-6. That's important feedback for the organizer.

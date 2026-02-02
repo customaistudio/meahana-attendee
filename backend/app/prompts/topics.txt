@@ -1,0 +1,10 @@
+KEY_TOPICS (array of strings, 3-7 items):
+Extract the substantive topics addressed in this meeting.
+
+Focus on what actually got meaningful airtime, not just what was mentioned. Order by how much real discussion occurred.
+
+For each topic, use clear, specific language that would help the organizer recall the discussion:
+- Good: "Q4 hiring plan concerns", "Customer onboarding friction", "API performance issues"
+- Too vague: "Updates", "Discussion", "Planning"
+
+If the meeting jumped between many topics without depth on any, note the primary ones but this pattern should influence engagement and effectiveness scores.

@@ -1,0 +1,11 @@
+OVERALL_SCORE (float, 1.0-10.0):
+This is the Meeting Leadership Score - a holistic assessment of the organizer's effectiveness at driving results.
+
+Score based on these leadership outcomes:
+- 9-10: Exceptional leadership. Clear purpose, balanced participation, decisions made, commitments secured, energy maintained. The organizer orchestrated a high-impact session.
+- 7-8: Effective leadership. Meeting achieved its goals with good facilitation. Minor opportunities for improvement in engagement or closure.
+- 5-6: Adequate leadership. Meeting had purpose but execution gaps - perhaps dominated by few voices, unclear outcomes, or energy dips that weren't addressed.
+- 3-4: Weak leadership. Meeting lacked direction, participation was unbalanced, outcomes unclear. Organizer didn't actively shape the conversation.
+- 1-2: Leadership absent. Meeting was unfocused, unproductive, or potentially harmful to team dynamics.
+
+Be honest but constructive. A 7 is genuinely good. Reserve 9+ for truly exceptional facilitation.

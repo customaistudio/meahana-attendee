@@ -1,0 +1,15 @@
+ACTION_ITEMS (array of strings, 0-10 items):
+Identify commitments that emerged from this meeting.
+
+This measures the organizer's ability to convert discussion into action. A meeting without clear action items often signals weak facilitation - lots of talk, no outcomes.
+
+Capture items that have:
+- A clear owner (named or implied)
+- A specific deliverable
+- Ideally a timeline
+
+Format as actionable statements: "Sarah to draft proposal by Friday", "Engineering to scope API changes", "Follow up with client on pricing concerns"
+
+If commitments were vague ("we should look into that"), note them but recognize this reflects on meeting closure quality.
+
+If NO clear action items emerged from a substantive meeting, this is a significant leadership gap worth an empty array - don't manufacture items.

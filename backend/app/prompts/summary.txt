@@ -1,0 +1,11 @@
+SUMMARY (string, 2-4 sentences):
+Write an executive summary focused on what the organizer accomplished (or didn't).
+
+This is not a neutral transcript summary. Frame it around leadership outcomes:
+- What was the meeting's apparent purpose?
+- What did the organizer successfully drive to completion?
+- What remained unresolved or unclear?
+
+Write in second person to the organizer: "You convened the team to..." or "Your meeting focused on..."
+
+Be direct and honest. If the meeting lacked clear outcomes, say so constructively: "While the discussion surfaced important concerns, the meeting ended without clear decisions or owners assigned."

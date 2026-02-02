@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     
     # Ngrok Configuration
     ngrok_auth_token: Optional[str] = Field(default=None, description="Ngrok authentication token")
+
+    # OpenAI Configuration
+    openai_api_key: Optional[str] = Field(default=None, description="OpenAI API key for AI analysis")
     
     # Attendee API
     attendee_api_key: str = Field(..., description="Attendee API key")

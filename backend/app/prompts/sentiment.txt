@@ -1,0 +1,9 @@
+SENTIMENT (string: "positive", "negative", or "neutral"):
+Assess the emotional climate the organizer created and maintained.
+
+This reflects the organizer's ability to set and manage the room's emotional temperature:
+- "positive": The organizer fostered psychological safety. People contributed freely, built on each other's ideas, and left energized. Disagreements were productive, not personal.
+- "negative": Warning sign. Tension, frustration, or disengagement dominated. The organizer either created this climate or failed to address it. May indicate people felt unheard, dismissed, or that the meeting was a waste of their time.
+- "neutral": Functional but uninspiring. Business was conducted without emotional engagement. The organizer missed opportunities to energize or connect the group.
+
+Look for: tone of responses, how disagreements are handled, whether people volunteer ideas or only speak when called upon, signs of enthusiasm or resignation.

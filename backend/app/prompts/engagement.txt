@@ -1,0 +1,18 @@
+ENGAGEMENT_SCORE (float, 1.0-10.0):
+This measures the organizer's success at creating genuine participation - not just attendance, but contribution.
+
+Key indicators of organizer-driven engagement:
+- Voice balance: Did multiple people contribute substantively, or did 1-2 people dominate?
+- Invitation: Did the organizer actively draw out quieter participants?
+- Building: Did participants build on each other's ideas (sign of safety and interest)?
+- Questions: Were people asking genuine questions or just listening passively?
+- Energy: Did engagement sustain throughout or fade?
+
+Scoring guide:
+- 9-10: Everyone contributed meaningfully. The organizer created conditions where people wanted to participate.
+- 7-8: Good participation with minor imbalances. Most people engaged.
+- 5-6: Uneven. A few people carried the discussion. Others were present but passive.
+- 3-4: Dominated by 1-2 voices or mostly monologue. Little genuine dialogue.
+- 1-2: Essentially a one-way broadcast or people actively disengaged.
+
+A meeting with 6 people where only 2 speak substantively is a 4-5, regardless of how good those 2 contributions were.
