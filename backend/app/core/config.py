@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     environment: str = Field(default="production", description="Environment")
     debug: bool = Field(default=False, description="Debug mode")
     
+    # Service API Key (for authenticating requests from Meahana Backend)
+    meahana_api_key: str = Field(..., description="API key for service-to-service authentication")
+    
     # Supabase Configuration
     supabase_url: str = Field(..., description="Supabase project URL")
     supabase_anon_key: str = Field(..., description="Supabase anonymous key")
@@ -37,6 +40,12 @@ class Settings(BaseSettings):
     webhook_max_retry_attempts: int = Field(default=3, description="Maximum webhook delivery retry attempts")
     webhook_retry_delays: str = Field(default="5,30,300", description="Comma-separated retry delays in seconds")
     webhook_fallback_timeout: int = Field(default=30, description="Webhook delivery timeout in seconds")
+    
+    # Outgoing Report Webhook Configuration
+    report_webhook_url: Optional[str] = Field(default=None, description="URL to POST reportcards to after analysis completes")
+    report_webhook_signing_secret: Optional[str] = Field(default=None, description="HMAC-SHA256 secret for signing outgoing webhook payloads")
+    report_webhook_timeout: int = Field(default=10, description="HTTP timeout in seconds for outgoing report webhooks")
+    report_webhook_max_retries: int = Field(default=3, description="Maximum retry attempts for outgoing report webhooks")
     
     @property
     def is_production(self) -> bool:

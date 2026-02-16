@@ -43,6 +43,26 @@ class NgrokService:
     def _configure_ngrok(self):
         """Configure ngrok settings"""
         try:
+            # Point pyngrok to the system-installed ngrok binary (Homebrew / snap / manual)
+            # Prefer well-known install paths over PATH to avoid finding the pyngrok wrapper
+            ngrok_search_paths = [
+                "/opt/homebrew/bin/ngrok",      # macOS Homebrew (Apple Silicon)
+                "/usr/local/bin/ngrok",          # macOS Homebrew (Intel) / Linux manual
+                "/snap/bin/ngrok",               # Linux snap
+            ]
+
+            system_ngrok = None
+            for path in ngrok_search_paths:
+                if os.path.isfile(path) and os.access(path, os.X_OK):
+                    system_ngrok = path
+                    break
+
+            if system_ngrok:
+                pyngrok_config = conf.get_default()
+                pyngrok_config.ngrok_path = system_ngrok
+                conf.set_default(pyngrok_config)
+                logger.info(f"Using system ngrok binary: {system_ngrok}")
+
             # Set ngrok auth token if provided
             auth_token = settings.ngrok_auth_token
             if auth_token:
