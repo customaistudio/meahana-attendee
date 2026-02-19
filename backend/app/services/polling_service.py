@@ -79,10 +79,6 @@ class PollingService:
             
             result = query.execute()
             
-            if result.error:
-                logger.error(f"Supabase error: {result.error}")
-                return []
-            
             return result.data
             
         except Exception as e:
@@ -128,10 +124,6 @@ class PollingService:
             # Get the meeting
             result = supabase.table("meetings").select("*").eq("id", meeting_id).eq("user_id", user_id).single().execute()
             
-            if result.error:
-                logger.error(f"Meeting {meeting_id} not found: {result.error}")
-                return False
-            
             meeting = result.data
             
             # Check the meeting status
@@ -155,12 +147,6 @@ class PollingService:
             
             result = query.single().execute()
             
-            if result.error:
-                if "No rows found" in str(result.error):
-                    return None
-                logger.error(f"Supabase error: {result.error}")
-                return None
-            
             return result.data
             
         except Exception as e:
@@ -172,14 +158,10 @@ class PollingService:
         try:
             supabase = get_supabase()
             
-            result = supabase.table("meetings").update({
+            supabase.table("meetings").update({
                 "status": new_status,
                 "updated_at": datetime.now(timezone.utc).isoformat()
             }).eq("id", meeting_id).eq("user_id", user_id).execute()
-            
-            if result.error:
-                logger.error(f"Failed to update meeting status: {result.error}")
-                return False
             
             return True
             
@@ -193,10 +175,6 @@ class PollingService:
             supabase = get_supabase()
             
             result = supabase.table("webhook_events").select("*").eq("meeting_id", meeting_id).eq("user_id", user_id).order("created_at", desc=True).execute()
-            
-            if result.error:
-                logger.error(f"Supabase error: {result.error}")
-                return []
             
             return result.data
             
@@ -255,12 +233,6 @@ class PollingService:
             supabase = get_supabase()
             
             result = supabase.table("meetings").select("*").eq("id", meeting_id).eq("user_id", user_id).single().execute()
-            
-            if result.error:
-                if "No rows found" in str(result.error):
-                    return None
-                logger.error(f"Supabase error: {result.error}")
-                return None
             
             return result.data
             
