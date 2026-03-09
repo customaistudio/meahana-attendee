@@ -19,7 +19,7 @@ class MeetingBase(BaseModel):
 
 
 class MeetingCreate(MeetingBase):
-    user_id: str
+    pass
 
 
 class MeetingUpdate(BaseModel):
@@ -196,12 +196,32 @@ class ListResponse(BaseModel):
     total: int
 
 
-# Outgoing Report Webhook schemas
-class ReportWebhookPayload(BaseModel):
-    event: str  # "report.completed"
-    meeting_id: int
-    meeting_url: str
-    bot_id: str
-    bot_name: Optional[str] = None
-    scorecard: ReportScore
-    created_at: str  # ISO 8601 timestamp
+# Authentication schemas
+class UserSignUp(BaseModel):
+    email: str
+    password: str
+
+
+class UserSignIn(BaseModel):
+    email: str
+    password: str
+
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    created_at: datetime
+    user_metadata: Optional[Dict[str, Any]] = None
+
+
+class SessionInfo(BaseModel):
+    access_token: str
+    refresh_token: str
+    expires_at: Optional[datetime] = None
+
+
+class AuthResponse(BaseModel):
+    success: bool
+    message: str
+    user: Optional[UserResponse] = None
+    session: Optional[SessionInfo] = None 

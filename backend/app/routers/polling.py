@@ -129,6 +129,14 @@ async def manually_check_meeting(
         supabase = get_supabase()
         result = supabase.table("meetings").select("id").eq("id", request.meeting_id).eq("user_id", current_user["id"]).single().execute()
         
+        if result.error:
+            if "No rows found" in str(result.error):
+                raise HTTPException(
+                    status_code=404,
+                    detail="Meeting not found"
+                )
+            raise Exception(f"Supabase error: {result.error}")
+        
         success = await polling_service.manual_check_meeting(request.meeting_id, current_user["id"])
         
         if success:

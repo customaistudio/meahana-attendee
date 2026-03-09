@@ -82,6 +82,14 @@ class BotService:
             # Get meeting for the current user
             result = supabase.table("meetings").select("*").eq("id", bot_id).eq("user_id", user_id).single().execute()
             
+            if result.error:
+                if "No rows found" in str(result.error):
+                    return StatusPollResponse(
+                        status_updated=False,
+                        message="Meeting not found"
+                    )
+                raise Exception(f"Supabase error: {result.error}")
+            
             meeting = result.data
             
             if not meeting.get("bot_id"):
@@ -109,9 +117,12 @@ class BotService:
             
             if status_updated:
                 # Update meeting status in Supabase
-                supabase.table("meetings").update({
+                update_result = supabase.table("meetings").update({
                     "status": new_status.value
                 }).eq("id", bot_id).eq("user_id", user_id).execute()
+                
+                if update_result.error:
+                    raise Exception(f"Supabase error: {update_result.error}")
                 
                 return StatusPollResponse(
                     status_updated=True,
@@ -215,9 +226,12 @@ class BotService:
                 status = MeetingStatus(status.upper())
             
             # Update meeting status in Supabase
-            supabase.table("meetings").update({
+            result = supabase.table("meetings").update({
                 "status": status.value
             }).eq("id", meeting_id).eq("user_id", user_id).execute()
+            
+            if result.error:
+                raise Exception(f"Supabase error: {result.error}")
             
         except Exception as e:
             logger.error(f"Failed to update meeting {meeting_id} status to {status}: {e}")
@@ -230,6 +244,11 @@ class BotService:
             supabase = get_supabase()
             
             result = supabase.table("meetings").select("*").eq("bot_id", bot_id).eq("user_id", user_id).single().execute()
+            
+            if result.error:
+                if "No rows found" in str(result.error):
+                    return None
+                raise Exception(f"Supabase error: {result.error}")
             
             return result.data
             

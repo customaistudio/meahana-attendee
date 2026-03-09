@@ -110,6 +110,10 @@ class TranscriptService:
                     # Check if chunk already exists
                     result = supabase.table("transcript_chunks").select("*").eq("meeting_id", meeting["id"]).eq("user_id", user_id).eq("timestamp", timestamp.isoformat()).eq("speaker", speaker).execute()
                     
+                    if result.error:
+                        logger.error(f"Supabase error checking existing chunk: {result.error}")
+                        continue
+                    
                     existing_chunks = result.data
                     
                     if not existing_chunks:
@@ -122,9 +126,12 @@ class TranscriptService:
                             "timestamp": timestamp.isoformat()
                         }
                         
-                        supabase.table("transcript_chunks").insert(chunk_data).execute()
+                        insert_result = supabase.table("transcript_chunks").insert(chunk_data).execute()
                         
-                        processed_count += 1
+                        if insert_result.error:
+                            logger.error(f"Failed to insert transcript chunk: {insert_result.error}")
+                        else:
+                            processed_count += 1
                     
                 except Exception as e:
                     logger.error(f"Error processing transcript chunk: {e}")
@@ -150,6 +157,10 @@ class TranscriptService:
             supabase = get_supabase()
             
             result = supabase.table("transcript_chunks").select("*").eq("meeting_id", meeting_id).eq("user_id", user_id).order("timestamp").execute()
+            
+            if result.error:
+                logger.error(f"Supabase error: {result.error}")
+                return []
             
             return result.data
             

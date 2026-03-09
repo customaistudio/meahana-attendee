@@ -42,6 +42,11 @@ class AnalysisService:
                 .execute()
             )
 
+            if result.error:
+                if "No rows found" in str(result.error):
+                    raise ValueError(f"Meeting {meeting_id} not found")
+                raise Exception(f"Supabase error: {result.error}")
+
             meeting = result.data
 
             # Check if analysis already exists
@@ -52,6 +57,9 @@ class AnalysisService:
                 .eq("user_id", user_id)
                 .execute()
             )
+
+            if result.error:
+                raise Exception(f"Supabase error: {result.error}")
 
             existing_reports = result.data
 
@@ -67,6 +75,9 @@ class AnalysisService:
                 .order("timestamp")
                 .execute()
             )
+
+            if result.error:
+                raise Exception(f"Supabase error: {result.error}")
 
             transcript_chunks = result.data
 
@@ -86,14 +97,8 @@ class AnalysisService:
 
             result = supabase.table("reports").insert(report_data).execute()
 
-            # Send outgoing webhook with the reportcard
-            try:
-                from app.services.report_webhook_service import ReportWebhookService
-                report_webhook_service = ReportWebhookService()
-                await report_webhook_service.send_report_webhook(meeting_id, user_id, scorecard)
-            except Exception as webhook_error:
-                # Log but don't fail the analysis if webhook delivery fails
-                logger.error(f"Report webhook failed for meeting {meeting_id}: {webhook_error}")
+            if result.error:
+                raise Exception(f"Supabase error: {result.error}")
 
         except Exception as e:
             logger.error(f"Failed to trigger analysis for meeting {meeting_id}: {e}")

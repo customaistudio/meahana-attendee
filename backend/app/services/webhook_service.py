@@ -61,6 +61,8 @@ class WebhookService:
             
             # Insert webhook event
             result = supabase.table("webhook_events").insert(webhook_event_data).execute()
+            if result.error:
+                raise Exception(f"Supabase error: {result.error}")
             
             webhook_event_id = result.data[0]["id"]
             
@@ -72,10 +74,13 @@ class WebhookService:
             await WebhookService._process_event_by_type(event_type, payload, user_id, background_tasks)
             
             # Mark webhook as processed
-            supabase.table("webhook_events").update({
+            update_result = supabase.table("webhook_events").update({
                 "processed": "true",
                 "processed_at": datetime.now(timezone.utc).isoformat()
             }).eq("id", webhook_event_id).execute()
+            
+            if update_result.error:
+                logger.error(f"Failed to mark webhook as processed: {update_result.error}")
             
             return {"status": "processed", "event_type": event_type}
                 
@@ -88,11 +93,14 @@ class WebhookService:
             if 'webhook_event_id' in locals():
                 try:
                     supabase = get_supabase()
-                    supabase.table("webhook_events").update({
+                    update_result = supabase.table("webhook_events").update({
                         "processed": "false",
                         "delivery_status": "failed",
                         "delivery_error": str(e)
                     }).eq("id", webhook_event_id).execute()
+                    
+                    if update_result.error:
+                        logger.error(f"Failed to mark webhook as failed: {update_result.error}")
                 except Exception as update_error:
                     logger.error(f"Failed to update webhook status: {update_error}")
             
@@ -118,6 +126,10 @@ class WebhookService:
             
             # Search for meeting with this bot_id
             result = supabase.table("meetings").select("*").eq("bot_id", bot_id).execute()
+            
+            if result.error:
+                logger.error(f"Supabase error finding meeting: {result.error}")
+                return None
             
             if not result.data:
                 return None
@@ -301,7 +313,10 @@ class WebhookService:
         }
         
         supabase = get_supabase()
-        supabase.table("transcript_chunks").insert(chunk_data).execute()
+        result = supabase.table("transcript_chunks").insert(chunk_data).execute()
+        
+        if result.error:
+            logger.error(f"Failed to insert transcript chunk: {result.error}")
 
     @staticmethod
     async def _handle_transcript_completed(

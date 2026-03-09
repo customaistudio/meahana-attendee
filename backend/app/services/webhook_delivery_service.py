@@ -71,6 +71,10 @@ class WebhookDeliveryService:
             
             result = query.execute()
             
+            if result.error:
+                logger.error(f"Supabase error: {result.error}")
+                return []
+            
             meetings = result.data
             
             suspicious_meetings = []
@@ -120,6 +124,10 @@ class WebhookDeliveryService:
             
             result = query.execute()
             
+            if result.error:
+                logger.error(f"Supabase error: {result.error}")
+                return []
+            
             return result.data
             
         except Exception as e:
@@ -163,6 +171,10 @@ class WebhookDeliveryService:
                 supabase = get_supabase()
                 result = supabase.table("meetings").select("user_id").eq("id", meeting["id"]).single().execute()
                 
+                if result.error:
+                    logger.error(f"Supabase error: {result.error}")
+                    return
+                
                 user_id = result.data["user_id"]
                 await polling_service.manual_check_meeting(meeting["id"], user_id)
                 
@@ -175,9 +187,13 @@ class WebhookDeliveryService:
             supabase = get_supabase()
             
             # Update webhook event with delivery status
-            supabase.table("webhook_events").update({
+            update_result = supabase.table("webhook_events").update({
                 "delivery_status": "delivered",
+                "delivered_at": datetime.now(timezone.utc).isoformat()
             }).eq("id", webhook_event_id).eq("user_id", user_id).execute()
+            
+            if update_result.error:
+                logger.error(f"Failed to update webhook delivery status: {update_result.error}")
                 
         except Exception as e:
             logger.error(f"Error processing webhook delivery: {e}")
@@ -194,6 +210,10 @@ class WebhookDeliveryService:
                 query = query.eq("user_id", user_id)
             
             result = query.execute()
+            
+            if result.error:
+                logger.error(f"Supabase error: {result.error}")
+                return
             
             failed_webhooks = result.data
             
@@ -218,7 +238,11 @@ class WebhookDeliveryService:
             if user_id:
                 update_result = update_result.eq("user_id", user_id)
             
-            update_result.execute()
+            result = update_result.execute()
+            
+            if result.error:
+                logger.error(f"Failed to update webhook for retry: {result.error}")
+                return
             
             # TODO: Implement actual webhook retry logic
             logger.info(f"Webhook {webhook['id']} marked for retry")
@@ -238,6 +262,10 @@ class WebhookDeliveryService:
                 query = query.eq("user_id", user_id)
             
             result = query.execute()
+            
+            if result.error:
+                logger.error(f"Supabase error: {result.error}")
+                return
             
             meetings = result.data
             
@@ -279,6 +307,10 @@ class WebhookDeliveryService:
             
             result = query.execute()
             
+            if result.error:
+                logger.error(f"Supabase error: {result.error}")
+                return {}
+            
             total_webhooks = result.count or 0
             
             # Get status counts
@@ -291,7 +323,10 @@ class WebhookDeliveryService:
                 
                 status_result = status_query.execute()
                 
-                status_counts[status] = status_result.count or 0
+                if not status_result.error:
+                    status_counts[status] = status_result.count or 0
+                else:
+                    status_counts[status] = 0
             
             # Calculate success rate
             delivered = status_counts.get("delivered", 0)
