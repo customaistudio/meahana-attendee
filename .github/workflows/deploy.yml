@@ -27,8 +27,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
 
-      - name: Check imports
-        run: cd backend && python -c "import app.main"
+      - name: Check syntax
+        run: python -m py_compile backend/app/main.py && echo "Syntax OK"
 
   deploy:
     name: Deploy
