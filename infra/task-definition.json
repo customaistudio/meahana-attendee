@@ -1,0 +1,71 @@
+{
+  "family": "meahana-attendee",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::584076102190:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::584076102190:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "meahana-attendee",
+      "image": "584076102190.dkr.ecr.us-east-1.amazonaws.com/meahana-attendee:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        { "name": "ENVIRONMENT", "value": "production" },
+        { "name": "DEBUG", "value": "false" },
+        { "name": "APP_NAME", "value": "Meahana Attendee" },
+        { "name": "ATTENDEE_API_BASE_URL", "value": "https://app.attendee.dev" },
+        { "name": "WEBHOOK_BASE_URL", "value": "https://assistant-dev.meahana.io" }
+      ],
+      "secrets": [
+        {
+          "name": "MEAHANA_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:584076102190:secret:meahana-attendee/MEAHANA_API_KEY"
+        },
+        {
+          "name": "SUPABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:584076102190:secret:meahana-attendee/SUPABASE_URL"
+        },
+        {
+          "name": "SUPABASE_ANON_KEY",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:584076102190:secret:meahana-attendee/SUPABASE_ANON_KEY"
+        },
+        {
+          "name": "SUPABASE_SERVICE_ROLE_KEY",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:584076102190:secret:meahana-attendee/SUPABASE_SERVICE_ROLE_KEY"
+        },
+        {
+          "name": "ATTENDEE_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:584076102190:secret:meahana-attendee/ATTENDEE_API_KEY"
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:584076102190:secret:meahana-attendee/OPENAI_API_KEY"
+        },
+        {
+          "name": "REPORT_WEBHOOK_URL",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:584076102190:secret:meahana-attendee/REPORT_WEBHOOK_URL"
+        },
+        {
+          "name": "REDIS_URL",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:584076102190:secret:meahana-attendee/REDIS_URL"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/meahana-attendee",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
