@@ -47,10 +47,12 @@ class BotService:
             # Call Attendee API to create bot
             bot_data = await self._create_attendee_bot(meeting)
             
-            # Update meeting with bot_id and status
+            # Scheduled bots stay PENDING until they join; immediate bots are STARTED
+            bot_status = "pending" if meeting.join_at else "started"
+
             update_data = {
                 "bot_id": bot_data["id"],
-                "status": "started"
+                "status": bot_status
             }
             
             result = self.supabase.table("meetings").update(update_data).eq("id", db_meeting["id"]).execute()
@@ -156,8 +158,12 @@ class BotService:
             f"{self.base_url}/api/v1/bots",
             json=payload
         )
-        response.raise_for_status()
-        
+
+        if response.status_code >= 400:
+            error_detail = response.text
+            logger.error(f"Attendee API error ({response.status_code}): {error_detail}")
+            raise Exception(f"Attendee API error ({response.status_code}): {error_detail}")
+
         return response.json()
     
     async def _get_bot_status(self, attendee_bot_id: str) -> dict:
