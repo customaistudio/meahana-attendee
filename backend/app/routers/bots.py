@@ -11,7 +11,7 @@ from app.schemas.schemas import (
 )
 from app.services.bot_service import BotService
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["bots"])
@@ -19,16 +19,32 @@ router = APIRouter(tags=["bots"])
 
 @router.post("/bots/", response_model=BotCreateResponse, dependencies=[Depends(verify_api_key)])
 async def create_bot(meeting: MeetingCreate):
-    """Create a new meeting bot. user_id is passed in the request body."""
+    """
+    Create a new meeting bot.
+
+    - If `join_at` is omitted or null, the bot joins immediately.
+    - If `join_at` is provided, it must be a future UTC timestamp. The bot
+      will be scheduled and join the meeting at that time.
+    """
+    if meeting.join_at:
+        now = datetime.now(timezone.utc)
+        join_at_utc = meeting.join_at.replace(tzinfo=timezone.utc) if meeting.join_at.tzinfo is None else meeting.join_at
+        if join_at_utc <= now:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"join_at must be in the future. Received: {meeting.join_at.isoformat()}, current UTC: {now.isoformat()}",
+            )
     try:
         bot_service = BotService()
         result = await bot_service.create_bot(meeting, meeting.user_id)
         return result
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Failed to create bot: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to create bot",
+            detail=f"Failed to create bot: {str(e)}",
         )
 
 
