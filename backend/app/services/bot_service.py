@@ -138,7 +138,9 @@ class BotService:
         }
         
         if meeting.join_at:
-            payload["join_at"] = meeting.join_at.isoformat()
+            # Attendee API expects ISO 8601 with Z suffix: 2025-06-13T12:00:00Z
+            join_at_utc = meeting.join_at.replace(tzinfo=None) if meeting.join_at.tzinfo else meeting.join_at
+            payload["join_at"] = join_at_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
         
         # Add webhooks configuration - REQUIRED for bot-level webhooks to work
         webhook_url = f"{settings.webhook_base_url.rstrip('/')}/webhook/"
@@ -154,17 +156,20 @@ class BotService:
             }
         ]
         
+        logger.info(f"Creating Attendee bot with payload: {payload}")
+
         response = await self.client.post(
             f"{self.base_url}/api/v1/bots",
             json=payload
         )
 
-        if response.status_code >= 400:
-            error_detail = response.text
-            logger.error(f"Attendee API error ({response.status_code}): {error_detail}")
-            raise Exception(f"Attendee API error ({response.status_code}): {error_detail}")
+        response_data = response.json() if response.status_code < 500 else response.text
+        logger.info(f"Attendee API response ({response.status_code}): {response_data}")
 
-        return response.json()
+        if response.status_code >= 400:
+            raise Exception(f"Attendee API error ({response.status_code}): {response_data}")
+
+        return response_data
     
     async def _get_bot_status(self, attendee_bot_id: str) -> dict:
         """Get bot status from Attendee API"""
